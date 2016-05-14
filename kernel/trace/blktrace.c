@@ -945,6 +945,32 @@ static void blk_add_trace_rq_remap(void *ignore,
 }
 
 /**
+ * blk_add_driver_data_bio - Add binary message with driver-specific data (api for bio)
+ * @q:		queue the io is for
+ * @bio:    a bio
+ * @data:	driver-specific data
+ * @len:	length of driver-specific data
+ *
+ * Description:
+ *     Some drivers might want to write driver-specific data per request.
+ *
+ **/
+void blk_add_driver_data_bio(struct request_queue *q,
+			 struct bio *bio,
+			 void *data, size_t len)
+{
+
+	struct blk_trace *bt = q->blk_trace;
+
+	if (likely(!bt))
+		return;
+
+	__blk_add_trace(bt, bio->bi_iter.bi_sector, bio->bi_iter.bi_size,
+			bio->bi_rw, BLK_TA_DRV_DATA, 0, len, data);
+}
+EXPORT_SYMBOL_GPL(blk_add_driver_data_bio);
+
+/**
  * blk_add_driver_data - Add binary message with driver-specific data
  * @q:		queue the io is for
  * @rq:		io request

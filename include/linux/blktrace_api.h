@@ -57,6 +57,8 @@ void __trace_note_message(struct blk_trace *, const char *fmt, ...);
 	} while (0)
 #define BLK_TN_MAX_MSG		128
 
+extern void blk_add_driver_data_bio(struct request_queue *q, struct bio *bio,
+				void *data, size_t len);
 extern void blk_add_driver_data(struct request_queue *q, struct request *rq,
 				void *data, size_t len);
 extern int blk_trace_setup(struct request_queue *q, char *name, dev_t dev,
@@ -73,6 +75,7 @@ extern struct attribute_group blk_trace_attr_group;
 # define blk_trace_ioctl(bdev, cmd, arg)		(-ENOTTY)
 # define blk_trace_shutdown(q)				do { } while (0)
 # define do_blk_trace_setup(q, name, dev, bdev, buts)	(-ENOTTY)
+# define blk_add_driver_data_bio(q, bio, data, len)		do {} while (0)
 # define blk_add_driver_data(q, rq, data, len)		do {} while (0)
 # define blk_trace_setup(q, name, dev, bdev, arg)	(-ENOTTY)
 # define blk_trace_startstop(q, start)			(-ENOTTY)
