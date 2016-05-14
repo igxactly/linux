@@ -43,13 +43,15 @@
 #include <linux/io-64-nonatomic-lo-hi.h>
 #include <asm/unaligned.h>
 
+#include <linux/blktrace_api.h>
+
 #include "nvme.h"
 
 #define NVME_Q_DEPTH		1024
 #define NVME_AQ_DEPTH		256
 #define SQ_SIZE(depth)		(depth * sizeof(struct nvme_command))
 #define CQ_SIZE(depth)		(depth * sizeof(struct nvme_completion))
-		
+
 /*
  * We handle AEN commands ourselves and don't even let the
  * block layer know about them.
@@ -698,6 +700,8 @@ static int nvme_queue_rq(struct blk_mq_hw_ctx *hctx,
 		goto out;
 	}
 	__nvme_submit_cmd(nvmeq, &cmnd);
+	blk_add_driver_data(req->q, req, "test", 5);
+
 	nvme_process_cq(nvmeq);
 	spin_unlock_irq(&nvmeq->q_lock);
 	return BLK_MQ_RQ_QUEUE_OK;
