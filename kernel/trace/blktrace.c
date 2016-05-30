@@ -1004,10 +1004,10 @@ void blk_add_driver_data(struct request_queue *q,
 		return;
 
 	if (rq->cmd_type == REQ_TYPE_BLOCK_PC)
-		__blk_add_trace(bt, 0, blk_rq_bytes(rq), 0,
+		__blk_add_trace(bt, 0, blk_rq_bytes(rq), rq->cmd_flags,
 				BLK_TA_DRV_DATA, rq->errors, len, data);
 	else
-		__blk_add_trace(bt, blk_rq_pos(rq), blk_rq_bytes(rq), 0,
+		__blk_add_trace(bt, blk_rq_pos(rq), blk_rq_bytes(rq), rq->cmd_flags,
 				BLK_TA_DRV_DATA, rq->errors, len, data);
 }
 EXPORT_SYMBOL_GPL(blk_add_driver_data);
